@@ -25,8 +25,8 @@
                             </div>
                             <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                 <div class="dropdown-content">
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Load</a>
+                                        <a class="dropdown-item" href="#" @click="save">Save</a>
+                                        <a class="dropdown-item" href="#" @click="load">Load</a>
                                 </div>
                             </div>
                         </div>
@@ -56,12 +56,18 @@ export default {
   },
   computed: {
     funds() {
-      return this.$store.getters.funds;
+      return this.$store.getters['current/funds'];
     }
   },
   methods: {
     isActive(index) {
       return this.activeIndex == index;
+    },
+    save() {
+        this.$store.dispatch('current/save');
+    },
+    load() {
+        this.$store.dispatch('current/load');
     }
   },
   mixins: [
@@ -88,10 +94,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .navbar-brand > a {
   display: flex;
   align-items: center;
   padding-right: 1rem;
+}
+.card-header-title {
+  font-weight: normal;
 }
 </style>
