@@ -22,8 +22,11 @@ export default {
   ],
   computed: {
     funds() {
-      return this.$store.getters['current/funds'];
+      return this.$store.getters.funds;
     } 
+  },
+  mounted() {
+    
   }
 }
 </script>

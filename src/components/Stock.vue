@@ -37,15 +37,15 @@ export default {
   },
   computed: {
     stocks() {
-      return this.$store.getters['current/stocks'];
+      return this.$store.getters.stocks;
     },
     funds() {
-      return this.$store.getters['current/funds'];
+      return this.$store.getters.funds;
     }
   },
   methods: {
     buy(stockName, quantity) {
-      this.$store.dispatch('current/buyStock', {
+      this.$store.dispatch('buyStock', {
         name: stockName,
         quantity: quantity,
         price: this.stocks[stockName].price

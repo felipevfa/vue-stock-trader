@@ -3,8 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-const current = {
-    namespaced: true,
+export const store = new Vuex.Store({
     state: {
         funds: 10000,
         stocks: {
@@ -58,6 +57,12 @@ const current = {
             } else {
                 state.portfolio[index].quantity -= stock.quantity;
             }
+        },
+        load(state, loadedState) {
+            console.log(JSON.stringify(loadedState));
+            state.funds = loadedState.funds;
+            state.portfolio = loadedState.portfolio || [];
+            state.stocks = loadedState.stocks;
         }
     },
     actions: {
@@ -69,68 +74,14 @@ const current = {
         },
         buyStock({ commit }, stock) {
             commit('addToPortfolio', stock);
-
             commit('removeFromFunds', stock.quantity * stock.price);
         },
         sellStock({ commit }, stock) {
             commit('removeFromPortfolio', stock);
-
             commit('addToFunds', stock.price * stock.quantity);
         },
-        save({ commit }) {
-            commit('save', null, { root: true });
-        },
-        load({ commit }) {
-            commit('load', null, { root: true });
+        load({ commit }, state) {
+            commit('load', state);
         }
-    }
-};
-
-const saved = {
-    namespaced: true,
-    state: {
-        funds: 10000,
-        stocks: {
-            'BMW': {
-                name: 'BMW',
-                price: 110
-            },
-            'Google': {
-                name: 'Google',
-                price: 200
-            },
-            'Apple': {
-                name: 'Apple',
-                price: 250
-            },
-            'Twitter': {
-                name: 'Twitter',
-                price: 50
-            }
-        },
-        portfolio: [
-
-        ]
     },
-    mutations: {
-
-    },
-    actions: {
-
-    }
-};
-
-export const store = new Vuex.Store({
-    modules: {
-        current,
-        saved
-    },
-    mutations: {
-        save(state) {
-            Object.assign(state.saved, state.current);
-        },
-        load(state) {
-            Object.assign(state.current, state.saved);
-        }
-    }
 });
