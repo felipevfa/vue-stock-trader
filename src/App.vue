@@ -39,17 +39,21 @@
         
         <div class="section">
             <div class="container">
-                <div v-if="serverResponse.status != responseStatus.UNDEFINED"
-                    class="notification"
-                    :class="{ 
-                        'is-success': serverResponse.status == responseStatus.SUCCESS,
-                        'is-danger': serverResponse.status == responseStatus.ERROR 
-                    }">
-                        <button class="delete" @click="resetServerResponse"></button>
-                        {{ serverResponse.message }}
-                </div>
-            
-                <router-view></router-view>
+                <transition name="alert">
+                    <div v-if="serverResponse.status != responseStatus.UNDEFINED"
+                         class="notification"
+                         :class="{ 
+                            'is-success': serverResponse.status == responseStatus.SUCCESS,
+                            'is-danger': serverResponse.status == responseStatus.ERROR 
+                         }">
+                            <button class="delete" @click="resetServerResponse"></button>
+                            {{ serverResponse.message }}
+                    </div>
+                </transition>
+                
+                <transition name="route" mode="out-in">
+                    <router-view></router-view>
+                </transition>
             </div>
         </div>
     </div>
@@ -164,5 +168,14 @@ export default {
 }
 .card-header-title {
   font-weight: normal;
+}
+.route-enter-active, .route-leave-active {
+    transition: opacity .2s ease;
+}
+.alert-enter-active, .alert-leave-active {
+    transition: opacity .4s ease;
+}
+.route-enter, .route-leave-to, .alert-enter, .alert-leave-to {
+    opacity: 0;
 }
 </style>

@@ -63,6 +63,9 @@ export const store = new Vuex.Store({
             state.funds = loadedState.funds;
             state.portfolio = loadedState.portfolio || [];
             state.stocks = loadedState.stocks;
+        },
+        endDay(state) {
+            
         }
     },
     actions: {
@@ -82,6 +85,9 @@ export const store = new Vuex.Store({
         },
         load({ commit }, state) {
             commit('load', state);
+        },
+        endDay({ commit }) {
+            commit('endDay');
         }
     },
 });
