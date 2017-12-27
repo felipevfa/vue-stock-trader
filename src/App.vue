@@ -1,40 +1,55 @@
 <template>
     <div>
-        <nav class="navbar is-light">
+        <nav class="navbar is-light" role="navigation" aria-label="main navigation">
             <div class="container">
                 <div class="navbar-brand">
-                    <router-link to="/">Stock Trader</router-link>
+                    <router-link class="navbar-item" to="/">Stock Trader</router-link>
+                    
+                    <button class="button is-light navbar-burger" 
+                            :class="{ 'is-active': menuActive }"
+                            @click="menuActive = !menuActive">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
     
-                <div class="navbar-menu">
-                    <router-link class="navbar-item" to="/stocks">Stocks</router-link>
-                    <router-link class="navbar-item" to="/portfolio">Portfolio</router-link>
-                </div>
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <button class="button is-info" @click="endDay">End Day</button>
+                <div class="navbar-menu" :class="{ 'is-active': menuActive }" id="menu">
+                    <div class="navbar-start">
+                        <router-link class="navbar-item" to="/stocks">Stocks</router-link>
+                        <router-link class="navbar-item" to="/portfolio">Portfolio</router-link>
                     </div>
-    
-                    <div class="navbar-item">
-                        <div class="dropdown">
-                            <div class="dropdown-trigger">
-                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                                    <span>Save & Load</span>
-                                    <span class="icon is-small">
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content">
-                                        <a class="dropdown-item" href="#" @click="save">Save</a>
-                                        <a class="dropdown-item" href="#" @click="load">Load</a>
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <button class="button is-info" 
+                                    :class="{ 'is-loading': endDayLoading }"
+                                    @click="endDay">End Day</button>
+                        </div>
+        
+                        <div class="navbar-item">
+                            <div class="dropdown">
+                                <div class="dropdown-trigger">
+                                    <button class="button"
+                                            :class="{ 'is-loading': saveAndLoadLoading }"
+                                            aria-haspopup="true" 
+                                            aria-controls="dropdown-menu">
+                                        <span>Save & Load</span>
+                                        <span class="icon is-small">
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                    <div class="dropdown-content">
+                                            <a class="dropdown-item" href="#" @click="save">Save</a>
+                                            <a class="dropdown-item" href="#" @click="load">Load</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="navbar-item">Funds: {{ funds | currency }}</div>
+                        <div class="navbar-item is-hidden-mobile">Funds: {{ funds | currency }}</div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -76,7 +91,9 @@ export default {
             ERROR: 2,
             SUCCESS: 1,
             UNDEFINED: 0
-        }
+        },
+        menuActive: false,
+        saveAndLoadLoading: false
     };
   },
   computed: {
@@ -90,6 +107,7 @@ export default {
     },
     save() {
         const state = this.$store.state;
+        this.saveAndLoadLoading = true;
 
         if (localStorage.getItem('stockTraderKey') != undefined) {
             const key = localStorage.getItem('stockTraderKey');
@@ -97,10 +115,12 @@ export default {
                 .then(res => {
                     this.serverResponse.message = 'Your data has been saved.';
                     this.serverResponse.status = this.responseStatus.SUCCESS;
+                    this.saveAndLoadLoading = false;
                 })
                 .catch(error => {
                     this.serverResponse.message = 'There was an error during the request: ' + error.statusText,
                     this.serverResponse.status = this.responseStatus.ERROR;
+                    this.saveAndLoadLoading = false;
                 });
         } else {
             this.$http.post(`users.json`, state)
@@ -108,29 +128,37 @@ export default {
                     this.serverResponse.message = 'Your data has been saved.';
                     this.serverResponse.status = this.responseStatus.SUCCESS;
                     localStorage.setItem('stockTraderKey', res.body.name);
+                    this.saveAndLoadLoading = false;
                 })
                 .catch(error => {
                     this.serverResponse.message = 'There was an error during the request: ' + error.statusText,
                     this.serverResponse.status = this.responseStatus.ERROR;
+                    this.saveAndLoadLoading = false;
                 });
         }
     },
     load() {
         if (localStorage.getItem('stockTraderKey') != undefined) {
             const key = localStorage.getItem('stockTraderKey');
+            this.saveAndLoadLoading = true;
+
             this.$http.get(`users/${key}.json`)
                 .then(res => {
                     this.$store.dispatch('load', res.body);
                     this.serverResponse.message = 'Your data has been loaded.';
                     this.serverResponse.status = this.responseStatus.SUCCESS;
+                    this.saveAndLoadLoading = false;
+                    
                 })
                 .catch(error => {
                     this.serverResponse.message = 'There was a problem retreving your data. Please try again later.';
                     this.serverResponse.status = this.responseStatus.ERROR;
+                    this.saveAndLoadLoading = false;
                 });
         } else {
             this.serverResponse.message = 'There is no data on the server.';
             this.serverResponse.status = this.responseStatus.ERROR;
+            this.saveAndLoadLoading = false;
         }
     },
     resetServerResponse() {
@@ -139,6 +167,13 @@ export default {
     },
     endDay() {
         this.$store.dispatch('endDay');
+
+        if (this.menuActive) {
+            this.menuActive = false;
+        }
+
+        this.serverResponse.message = 'A new day has begun!';
+        this.serverResponse.status = this.responseStatus.SUCCESS;
     }
   },
   mixins: [
