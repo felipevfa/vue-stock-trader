@@ -3,6 +3,10 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+const getIntBetween = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
 export const store = new Vuex.Store({
     state: {
         funds: 10000,
@@ -65,7 +69,9 @@ export const store = new Vuex.Store({
             state.stocks = loadedState.stocks;
         },
         endDay(state) {
-            
+            for (let stock in state.stocks) {
+                state.stocks[stock].price = getIntBetween(50, 350);
+            }
         }
     },
     actions: {

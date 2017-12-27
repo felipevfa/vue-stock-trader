@@ -11,7 +11,9 @@
                     <router-link class="navbar-item" to="/portfolio">Portfolio</router-link>
                 </div>
                 <div class="navbar-end">
-                    <div class="navbar-item">End Day</div>
+                    <div class="navbar-item">
+                        <button class="button is-info" @click="endDay">End Day</button>
+                    </div>
     
                     <div class="navbar-item">
                         <div class="dropdown">
@@ -134,6 +136,9 @@ export default {
     resetServerResponse() {
         this.serverResponse.message = '';
         this.serverResponse.status = this.responseStatus.UNDEFINED;
+    },
+    endDay() {
+        this.$store.dispatch('endDay');
     }
   },
   mixins: [
