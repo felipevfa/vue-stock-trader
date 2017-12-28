@@ -1,8 +1,11 @@
-# vue-cli
+# Vue Stock Trader
 
-> A Vue.js project
+This is a simple Stock Trader simulator, written as part of the [VueJS 2 - The Complete Guide](https://www.udemy.com/vuejs-2-the-complete-guide)
+course taught by [Maximilian Schwarzmüller](https://www.udemy.com/user/maximilian-schwarzmuller/) at Udemy. 
 
-## Build Setup
+## Build
+
+To run the project locally, just execute:
 
 ``` bash
 # install dependencies
@@ -10,9 +13,6 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
-
-# build for production with minification
-npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+

@@ -1,8 +1,7 @@
 {
-  "name": "vue-cli",
-  "description": "A Vue.js project",
-  "author": "Maximilian Schwarzmüller <mblacky0@gmail.com>",
-  "private": true,
+  "name": "stock-trader",
+  "description": "A Stock Trader simulator made as part of the VueJS 2 Course taught by Maximillian at Udemy.",
+  "author": "Felipe Aragão <felipevfaragao@gmail.com>",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"

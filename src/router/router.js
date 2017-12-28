@@ -9,7 +9,8 @@ Vue.use(VueRouter);
 const routes = [
     { path: '/', component: Home },
     { path: '/stocks', component: Stock },
-    { path: '/portfolio', component: Portfolio }
+    { path: '/portfolio', component: Portfolio },
+    { path: '*', component: Home }
 ];
 
 export const router = new VueRouter({
