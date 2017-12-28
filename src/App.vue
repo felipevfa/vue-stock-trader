@@ -3,7 +3,10 @@
         <nav class="navbar is-light" role="navigation" aria-label="main navigation">
             <div class="container">
                 <div class="navbar-brand">
-                    <router-link class="navbar-item" to="/">Stock Trader</router-link>
+                    <router-link class="navbar-item" 
+                        :class="{ 'is-active': activeRoute == 'home' }" 
+                        @click="activeRoute = 'home'"
+                        to="/">Stock Trader</router-link>
                     
                     <button class="button is-light navbar-burger" 
                             :class="{ 'is-active': menuActive }"
@@ -16,8 +19,14 @@
     
                 <div class="navbar-menu" :class="{ 'is-active': menuActive }" id="menu">
                     <div class="navbar-start">
-                        <router-link class="navbar-item" to="/stocks">Stocks</router-link>
-                        <router-link class="navbar-item" to="/portfolio">Portfolio</router-link>
+                        <router-link class="navbar-item" 
+                                :class="{ 'is-active': activeRoute == 'stocks' }" 
+                                @click="activeRoute = 'stocks'"
+                                to="/stocks">Stocks</router-link>
+                        <router-link class="navbar-item" 
+                                :class="{ 'is-active': activeRoute == 'portfolio' }" 
+                                @click="activeRoute = 'portfolio'"
+                                to="/portfolio">Portfolio</router-link>
                     </div>
                     <div class="navbar-end">
                         <div class="navbar-item">
@@ -93,6 +102,7 @@ export default {
             UNDEFINED: 0
         },
         menuActive: false,
+        activeRoute: 'home',
         saveAndLoadLoading: false
     };
   },
